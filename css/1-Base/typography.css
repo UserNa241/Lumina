@@ -1,0 +1,33 @@
+
+/*css/1-Base/typography.css*/
+
+body{
+    /*Global Defaults*/
+    font-family: var(--font-primary),sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+
+    /*Redability*/
+    line-height: 1.6;
+
+    /*Rendering Engine*/
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    /*Display Font*/
+    font-family: var(--font-display),sans-serif;
+
+    /*Header Styling*/
+    font-weight: 700;
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: var(--text-primary);
+}
+
+a{
+    /*Link reset*/
+    color: inherit;
+    text-decoration: none;
+}

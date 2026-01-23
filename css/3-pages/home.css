@@ -1,0 +1,57 @@
+
+/*css/3-pages/home.css*/
+
+/*1.Hero Container*/
+.hero{
+    position: relative;
+    width: 100%;
+
+    /*Dynamic Viewport*/
+    height: 100dvh;
+
+    /*Center content*/
+    display: grid;
+    place-items: center;
+
+    background-color: var(--bg-primary);
+    overflow: hidden;
+}
+
+/*2. BACKGROUND CANVAS*/
+#hero-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+
+    z-index: var(--z-canvas);
+    opacity: 0.6;
+}
+
+/*3. Hero Content Wrapper*/
+.hero__content {
+    position: relative;
+    z-index: var(--z-content);
+    text-align: center;
+
+    /*Invert Color*/
+    mix-blend-mode: difference;
+}
+
+/*4. Main Title*/
+.hero__title {
+    /*Fluid Typography*/
+
+
+
+}
+
+
+
+
+
+
+
+
+
+

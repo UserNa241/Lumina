@@ -1,0 +1,30 @@
+/*css/1-base/vars.css*/
+
+:root {
+
+    /*1. Typography Tokens*/
+
+    /*UI Text */
+    --font-primary: "Inter";
+
+    /*Headers*/
+    --font-display: "Syncopate";
+
+
+    /*2. Color Tokens*/
+
+    /*Backgrounds*/
+    --bg-primary: #050505;
+
+    /*Text*/
+    --text-primary: #F0F0F0;
+    --text-secondary: #888888;
+
+
+    /*Z- INDEX LAYERS */
+    --z-canvas: 1;
+    --z-content: 10;
+    --z-fixed: 100;
+    --z-modal: 1000;
+    --z-cursor: 9999;
+}
