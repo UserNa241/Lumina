@@ -4,10 +4,10 @@
 /*1.Hero Container*/
 .hero{
     position: relative;
-    width: 100%;
+    inline-size: 100%;
 
     /*Dynamic Viewport*/
-    height: 100dvh;
+    block-size: 100dvh;
 
     /*Center content*/
     display: grid;
@@ -21,8 +21,8 @@
 #hero-canvas {
     position: absolute;
     inset: 0;
-    width: 100%;
-    height: 100%;
+    inline-size: 100%;
+    block-size: 100%;
 
     z-index: var(--z-canvas);
     opacity: 0.6;
@@ -41,13 +41,41 @@
 /*4. Main Title*/
 .hero__title {
     /*Fluid Typography*/
+    font-size: clamp(4rem, 15cqi, 12rem);
 
-
+    line-height: 1;
+    letter-spacing: -4px;
 
 }
 
+/*5. Hero Subtitle*/
+.hero__subtitle {
+    font-size: 1.25rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    margin-block-start: 1rem;
+}
 
+/*6. SCROLL INDICATOR*/
+.hero__scroll {
+    position: absolute;
 
+    inset-inline-start: 50%;
+    transform: translateX(-50%);
+
+    inline-size: 1px;
+    block-size: 150px;
+
+    background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--text-primary) 50%,
+    var(--text-primary) 100%,
+    );
+
+    z-index: var(--z-content);
+    opacity: 0.5;
+}
 
 
 

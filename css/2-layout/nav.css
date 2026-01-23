@@ -1,0 +1,36 @@
+
+/*css/2-layout/nav.css*/
+
+/*The Fixed Container*/
+.nav-trigger{
+    position: fixed;
+
+    /*Pin to Top Right*/
+    inset-block-start: 2rem;
+    inset-inline-end: 2rem;
+
+    z-index: var(--z-fixed);
+
+    /*Contrast Management*/
+    mix-blend-mode: difference;
+}
+
+.nav-trigger__btn{
+    font-family: var(--font-primary),sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+
+    /*Colors*/
+    color: var(--text-primary);
+    cursor: pointer;
+
+    padding: 1rem;
+
+    transition: opacity 0.3s ease;
+}
+
+.nav-trigger__btn:hover{
+    opacity: 0.7;
+}
