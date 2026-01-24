@@ -5,20 +5,32 @@
     /*1. Typography Tokens*/
 
     /*UI Text */
-    --font-primary: "Inter";
+    --font-primary: "Inter", sans-serif;
 
     /*Headers*/
-    --font-display: "Syncopate";
+    --font-display: "Syncopate", sans-serif;
 
+
+    /*Layout*/
+    --container-width: 90rem;
 
     /*2. Color Tokens*/
 
     /*Backgrounds*/
     --bg-primary: #050505;
+    --bg-secondary: #101010;
+    --accent: #C084FC;
+
+    /*Border*/
+    --border-subtle: rgba(255, 255, 255, 0.1);
+
+    /*Star Color*/
+    --star-color: 255, 255, 255;
 
     /*Text*/
     --text-primary: #F0F0F0;
     --text-secondary: #888888;
+    --text-hero: #F0F0F0;
 
 
     /*Z- INDEX LAYERS */
@@ -28,3 +40,21 @@
     --z-modal: 1000;
     --z-cursor: 9999;
 }
+
+/*@media (prefers-color-scheme: light){*/
+/*    :root {*/
+/*        --bg-primary: #F0F0F0;*/
+/*        --bg-secondary: #FFFFFF;*/
+
+/*        --text-primary: #1A1A1A;*/
+/*        --text-secondary: #666666;*/
+/*        --text-hero: white;*/
+
+/*        --accent: #7C3AED;*/
+
+/*        --border-subtle: rgba(0, 0, 0, 0.1);*/
+
+/*        !*Star Color*!*/
+/*        --star-color: 0, 0, 0;*/
+/*    }*/
+/*}*/

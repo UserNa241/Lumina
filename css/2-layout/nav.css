@@ -23,7 +23,7 @@
     letter-spacing: 1px;
 
     /*Colors*/
-    color: var(--text-primary);
+    color: var(--text-hero);
     cursor: pointer;
 
     padding: 1rem;

@@ -20,3 +20,6 @@
 
 /*Navigation Import*/
 @import url("2-layout/nav.css") layer(layout);
+
+/*Footer Import*/
+@import url("2-layout/footer.css") layer(layout);
