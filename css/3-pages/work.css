@@ -1,0 +1,109 @@
+
+/*css/3-pages/work.css*/
+
+/*Header Container*/
+
+.work-header {
+    position: sticky;
+    inset-block-start: 0;
+
+    z-index: var(--z-work-header);
+
+    background-color: var(--bg-primary);
+
+    border-bottom: 1px solid var(--border-subtle);
+    padding-block: 1.5rem;
+    margin-block-end: 2rem;
+
+}
+
+.work-header__inner{
+    max-inline-size: var(--container-width);
+    margin-inline: auto;
+    padding-inline: 2rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.work-header__title {
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+
+    font-family: var(--font-primary);
+    text-transform: uppercase;
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+.work-header__title h1{
+    font-size: inherit;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.filters {
+    position: relative;
+    display: flex;
+    gap: 0.25rem;
+
+    background-color: var(--bg-secondary);
+    padding: 0.25rem;
+    border-radius: 100px;
+    border: 1px solid var(--border-subtle);
+}
+
+.filter-btn {
+    position: relative;
+    z-index: 2;
+
+    padding: 0.5rem 1.25rem;
+    border-radius: 100px;
+
+    text-transform: uppercase;
+    font-weight: 600;
+
+    color: var(--text-secondary);
+    cursor: pointer;
+
+    transition: color 0.3s ease;
+}
+
+.filter-btn:hover {
+    background-color: var(--text-primary);
+}
+
+.filter-btn.is-active {
+    color: var(--bg-primary);
+}
+
+.filter-glider {
+    position: absolute;
+    inset-block-start: 0.5rem;
+    inset-inline-start: 0.5rem;
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

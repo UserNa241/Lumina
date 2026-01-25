@@ -23,3 +23,6 @@
 
 /*Footer Import*/
 @import url("2-layout/footer.css") layer(layout);
+
+/*Work Page Sheet*/
+@import url("3-pages/work.css") layer(pages);
