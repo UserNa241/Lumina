@@ -16,7 +16,7 @@ export default class Canvas {
 
 		// 2. Configuration
 		this.particles = [];
-		this.particlesCount = 250;
+		this.particlesCount = 300;
 
 		this.interactionRadius = 200;
 		this.mouse = null;
@@ -37,13 +37,36 @@ export default class Canvas {
 		// Listen for window resize
 		addEventListener('resize', this.resize);
 		window.addEventListener('scroll', this.handleScroll);
-
-		// Create New Particle
-		this.createParticles();
+		this.starColor = this.getStarColor();
+		this.watchTheme();
 
 		// Start the loop
 		this.animate();
 
+	}
+
+	watchTheme() {
+	  // A) React to OS theme changes (prefers-color-scheme)
+	  this._mq = window.matchMedia("(prefers-color-scheme: dark)");
+	  this._mq.addEventListener("change", () => {
+	    this.starColor = this.getStarColor();
+	  });
+
+	  // B) React to your own theme toggles (class or data-theme on <html>)
+	  const root = document.documentElement;
+	  this._mo = new MutationObserver(() => {
+	    this.starColor = this.getStarColor();
+	  });
+
+	  this._mo.observe(root, {
+	    attributes: true,
+	    attributeFilter: ["class", "data-theme"]
+	  });
+
+	  // C) Optional: manual trigger if you ever want it
+	  window.addEventListener("lumina:themechange", () => {
+	    this.starColor = this.getStarColor();
+	  });
 	}
 
 	handleScroll() {
@@ -75,7 +98,7 @@ export default class Canvas {
 	animate() {
 		// Clear the screen
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		const starColor = this.getStarColor();
+		const starColor = this.starColor;
 
 		const relative = Cursor.getRelativePosition(this.canvas);
 
@@ -122,7 +145,7 @@ export default class Canvas {
 				if (distance < 150) {
 					const opacity = 1 - (distance / 150);
 					this.ctx.beginPath();
-					this.ctx.strokeStyle = `rgba(${starColor}, ${opacity * 0.3})`;
+					this.ctx.strokeStyle = `rgba(${starColor}, ${opacity * 0.4})`;
 					this.ctx.lineWidth = 0.5;
 					this.ctx.moveTo(p1.x, p1.y);
 					this.ctx.lineTo(p2.x, p2.y);
@@ -161,10 +184,10 @@ class Particle {
 		if (this.y < 0 || this.y > canvasHeight) this.vy *= -1;
 	}
 
-	draw(ctx) {
+	draw(ctx, starColor) {
 		ctx.beginPath();
 		ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
-		ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+		ctx.fillStyle = 'rgba(${starColor}, 1)';
 		ctx.fill();
 	}
 

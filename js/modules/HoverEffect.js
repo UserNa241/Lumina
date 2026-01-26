@@ -1,120 +1,122 @@
 // js/modules/HoverEffect.js
 import Cursor from "./Cursor.js";
-import cursor from "./Cursor.js";
 
 export default class HoverEffect {
+  constructor() {
+    this.list = document.querySelector(".work-list__list");
+    if (!this.list) return;
 
-	constructor() {
+    this.rotation = 0;
 
-		this.items = document.querySelectorAll('.work-list__item');
-		this.rotation = 0;
+    // Active state (single source of truth)
+    this.activeRow = null;
+    this.activeImage = null;
 
-		this.handleMouseEnter = this.handleMouseEnter.bind(this);
-		this.handleMouseLeave = this.handleMouseLeave.bind(this);
-		this.handleScroll = this.handleScroll.bind(this);
-		this.animate = this.animate.bind(this);
+    // Bind
+    this.handleListOver = this.handleListOver.bind(this);
+    this.handleListLeave = this.handleListLeave.bind(this);
+    this.handleScroll = this.handleScroll.bind(this);
+    this.animate = this.animate.bind(this);
 
-		this.init();
-	}
+    this.init();
+  }
 
-	init() {
+  init() {
+    // "mouseenter equivalent" for delegation
+    this.list.addEventListener("mouseover", this.handleListOver);
 
-		window.addEventListener('scroll', this.handleScroll);
+    // true exit of the whole list area
+    this.list.addEventListener("mouseleave", this.handleListLeave);
 
-		this.items.forEach((item) => {
-			// Find specific Link and image for row
-			const link = item.querySelector('.work-list__link');
-			const image = item.querySelector('.work-list__preview');
+    // your trackpad-scroll technique
+    window.addEventListener("scroll", this.handleScroll);
 
-			// Pass specific images
-			link.addEventListener('mouseenter', () => this.handleMouseEnter(item, image));
-			link.addEventListener('mouseleave', () => this.handleMouseLeave(item, image));
+    // keep the image following cursor
+    this.animate();
+  }
 
-		});
-		this.animate();
-	}
+  handleListOver(e) {
+    const row = e.target.closest(".work-list__item");
+    if (!row) return;
 
-	handleMouseEnter(item, image) {
+    // if we're still on the same row, do nothing
+    if (row === this.activeRow) return;
 
-		item.classList.add('is-active');
-		// Show the image
-		image.classList.add('is-visible');
+    const image = row.querySelector(".work-list__preview");
+    if (!image) return;
 
-		// Snap to position immediately
-		this.moveImage(image, 0);
-	}
+    this.setActive(row, image);
+  }
 
-	handleMouseLeave(item, image) {
-		item.classList.remove('is-active');
-		// image.classList.remove('is-visible');
-		this.resetAllImages();
-	}
+  handleListLeave() {
+    this.clearActive();
+  }
 
-	handleScroll () {
+  handleScroll() {
+    const el = document.elementFromPoint(Cursor.x, Cursor.y);
+    const row = el?.closest?.(".work-list__item");
 
-		const elementUnderMouse = document.elementFromPoint(Cursor.x, Cursor.y);
-		// Hit Test
-		const row = elementUnderMouse.closest('.work-list__item');
-
-		if (row) {
-
-			const image = row.querySelector('.work-list__preview');
-
-			if (!row.classList.contains('is-active')) {
-				this.resetAllImages();
-				this.handleMouseEnter(row,image);
-			}
-		} else {
-			this.resetAllImages();
-		}
-	}
-
-	resetAllImages() {
-		this.items.forEach(item => item.classList.remove('is-active'));
-        document.querySelectorAll('.work-list__preview').forEach(img => {
-            img.classList.remove('is-visible');
-        });
+    if (!row) {
+      this.clearActive();
+      return;
     }
 
-	animate() {
+    if (row === this.activeRow) return;
 
-		// Apply Friction
-		// this.vel.x *= 0.9;
+    const image = row.querySelector(".work-list__preview");
+    if (!image) return;
 
-		let rotation = Cursor.velX * 0.2;
+    this.setActive(row, image);
+  }
 
-		if (rotation > 15) rotation = 15;
-		if (rotation < -15) rotation = -15;
+  setActive(row, image) {
+    // clear previous
+    this.clearActive();
 
-		this.rotation += (rotation - this.rotation) * 0.1;
+    // set new
+    row.classList.add("is-active");
+    image.classList.add("is-visible");
 
-		const activeImage = document.querySelector('.work-list__preview.is-visible');
-		if (activeImage) {
-			this.moveImage(activeImage, this.rotation);
-		}
+    this.activeRow = row;
+    this.activeImage = image;
 
-		requestAnimationFrame(this.animate);
+    // snap immediately once
+    this.moveImage(image, 0);
+  }
 
-	}
+  clearActive() {
+    if (this.activeRow) this.activeRow.classList.remove("is-active");
+    if (this.activeImage) this.activeImage.classList.remove("is-visible");
 
-	moveImage(image, rotation) {
+    this.activeRow = null;
+    this.activeImage = null;
+  }
 
-		// Measure image
-		const bounds = image.getBoundingClientRect();
+  animate() {
+    let rotation = Cursor.velX * 0.2;
+    if (rotation > 15) rotation = 15;
+    if (rotation < -15) rotation = -15;
 
-		// Calculate Right of cursor
-		let offsetX = Cursor.x + 20;
-		let offsetY = Cursor.y + 20;
+    this.rotation += (rotation - this.rotation) * 0.1;
 
-		// Boundary Check (Keep on screen)
-		const screenWidth = window.innerWidth;
-		if (offsetX + bounds.width > screenWidth) {
-			offsetX = Cursor.x - bounds.width - 20;
-		}
+    if (this.activeImage) {
+      this.moveImage(this.activeImage, this.rotation);
+    }
 
-		image.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) rotate(${rotation}deg)`;
+    requestAnimationFrame(this.animate);
+  }
 
+  moveImage(image, rotation) {
+    const bounds = image.getBoundingClientRect();
 
-	}
+    let x = Cursor.x + 20;
+    let y = Cursor.y + 20;
 
+    const vw = window.innerWidth;
+    if (x + bounds.width > vw) {
+      x = Cursor.x - bounds.width - 20;
+    }
+
+    image.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${rotation}deg)`;
+  }
 }

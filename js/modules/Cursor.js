@@ -52,4 +52,5 @@ export class Cursor {
 	}
 }
 
-export default Cursor = new Cursor();
+const cursor = new Cursor();
+export default cursor;

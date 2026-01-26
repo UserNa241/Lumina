@@ -19,7 +19,7 @@
 }
 
 /*2. BACKGROUND CANVAS*/
-#hero-canvas {
+.hero-canvas {
     position: absolute;
     inset: 0;
     inline-size: 100%;

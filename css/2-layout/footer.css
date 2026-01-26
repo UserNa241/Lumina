@@ -8,7 +8,7 @@
 
     /* LAYERING */
     z-index: 2; /* Must be higher than Footer (1) */
-    background-color: var(--bg-primary); /* Must be opaque (Black) to hide footer */
+    background-color: var(--bg-secondary); /* Must be opaque (Black) to hide footer */
 
     /* THE MAGIC TRICK */
     /* We add margin to the bottom equal to the footer height. */
@@ -18,7 +18,7 @@
 
     /* DEPTH */
     /* A shadow creates the illusion that the page is physically above the footer */
-    box-shadow: 0 50px 100px rgba(var(--bg-primary),0.8);
+    box-shadow: 0 50px 100px color-mix(in srgb, var(--bg-primary) 80% , transparent );
 }
 
 .footer {
