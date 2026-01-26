@@ -24,8 +24,6 @@ export default class Canvas {
 		// 3.Bind Methods
 		this.resize = this.resize.bind(this);
 		this.animate = this.animate.bind(this);
-		// this.handleMouseMove = this.handleMouseMove.bind(this);
-		this.handleScroll = this.handleScroll.bind(this);
 
 		this.init();
 	}
@@ -36,7 +34,7 @@ export default class Canvas {
 
 		// Listen for window resize
 		addEventListener('resize', this.resize);
-		window.addEventListener('scroll', this.handleScroll);
+		// window.addEventListener('scroll', this.handleScroll);
 		this.starColor = this.getStarColor();
 		this.watchTheme();
 
@@ -187,7 +185,7 @@ class Particle {
 	draw(ctx, starColor) {
 		ctx.beginPath();
 		ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
-		ctx.fillStyle = 'rgba(${starColor}, 1)';
+		ctx.fillStyle = `rgba(${starColor}, 1)`;
 		ctx.fill();
 	}
 

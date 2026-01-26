@@ -261,14 +261,13 @@
     text-decoration: none;
 
     /* ANIMATION SETUP */
-    transition: color 100ms linear;
+    transition: all 100ms linear;
 }
 
 /* CATEGORY TEXT */
 .work-list__cat {
     font-family: var(--font-primary); /* Inter Font */
     font-size: 1rem;
-    color: var(--text-secondary);
     letter-spacing: 1px;
 }
 
@@ -276,10 +275,13 @@
 
 /* HOVER STATE: ACTIVE ITEM */
 .work-list__item.is-active .work-list__link {
+    /*Change text color*/
     color: var(--accent);
+}
 
-    /* Slide Text to the Right */
-    padding-inline-start: 2rem;
+.work-list__item.is-active .work-list__name {
+    /*Slide text to right*/
+    transform: translateX(2rem);
 }
 
 /* HOVER STATE: INACTIVE ITEMS (Spotlight) */
@@ -295,7 +297,7 @@
     inset-block-start: 0;
     inset-inline-start: 0;
 
-    inline-size: clamp(200px, 20vw, 400px);
+    inline-size: clamp(12.5rem, 20vw, 25rem);
     aspect-ratio: 16/9;
     object-fit: cover;
 

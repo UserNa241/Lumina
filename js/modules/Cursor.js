@@ -36,7 +36,7 @@ export class Cursor {
 
 	getRelativePosition(element) {
 
-			const rect = element.getBoundingClientRect();
+		const rect = element.getBoundingClientRect();
 
 		return {
 			x: this.x - rect.left,

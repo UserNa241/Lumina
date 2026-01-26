@@ -8,11 +8,9 @@ export default class HoverEffect {
 
     this.rotation = 0;
 
-    // Active state (single source of truth)
     this.activeRow = null;
     this.activeImage = null;
 
-    // Bind
     this.handleListOver = this.handleListOver.bind(this);
     this.handleListLeave = this.handleListLeave.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
@@ -22,16 +20,11 @@ export default class HoverEffect {
   }
 
   init() {
-    // "mouseenter equivalent" for delegation
     this.list.addEventListener("mouseover", this.handleListOver);
-
-    // true exit of the whole list area
     this.list.addEventListener("mouseleave", this.handleListLeave);
 
-    // your trackpad-scroll technique
-    window.addEventListener("scroll", this.handleScroll);
+    window.addEventListener("scroll", this.handleScroll, { passive: true });
 
-    // keep the image following cursor
     this.animate();
   }
 
@@ -39,7 +32,6 @@ export default class HoverEffect {
     const row = e.target.closest(".work-list__item");
     if (!row) return;
 
-    // if we're still on the same row, do nothing
     if (row === this.activeRow) return;
 
     const image = row.querySelector(".work-list__preview");
@@ -70,17 +62,14 @@ export default class HoverEffect {
   }
 
   setActive(row, image) {
-    // clear previous
     this.clearActive();
 
-    // set new
     row.classList.add("is-active");
     image.classList.add("is-visible");
 
     this.activeRow = row;
     this.activeImage = image;
 
-    // snap immediately once
     this.moveImage(image, 0);
   }
 
@@ -94,6 +83,7 @@ export default class HoverEffect {
 
   animate() {
     let rotation = Cursor.velX * 0.2;
+
     if (rotation > 15) rotation = 15;
     if (rotation < -15) rotation = -15;
 
