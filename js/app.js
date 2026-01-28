@@ -5,6 +5,9 @@
 import Canvas from './modules/Canvas.js';
 import HoverEffect from "./modules/HoverEffect.js";
 import FilterSystem from './modules/FilterSystem.js';
+import GridManager from './modules/GridManager.js';
+
+
 document.addEventListener('DOMContentLoaded', () => {
 
     // 3. Initialize the Canvas Animation
@@ -12,10 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
     new Canvas({ canvasId: 'hero-canvas' });
     new HoverEffect();
     new FilterSystem();
+    new GridManager();
 
     console.log('System Online: Canvas Initialized');
     console.log('System Online: HoverEffect Initialized');
     console.log('System: Filters Initialized');
+    console.log('System: GridManager Initialized');
 });
 
 

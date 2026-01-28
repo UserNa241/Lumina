@@ -9,9 +9,8 @@
     z-index: var(--z-work-header);
 
     background-color: var(--bg-primary);
-
     border-bottom: 1px solid var(--border-subtle);
-    padding-block: 2rem;
+    padding-block: 1rem;
 
 }
 
@@ -73,7 +72,7 @@
 }
 
 .filter-btn:hover {
-    background-color: #f3f3f3;
+    background-color: rgba(204, 204, 204, 0.5);
     color: black;
 }
 
@@ -102,12 +101,167 @@
     will-change: transform, inline-size;
 }
 
+/*THE GRID CONTAINER*/
+.work-grid {
+    inline-size: 100%;
+    padding-inline: 4rem;
+}
 
+.work-grid__content {
+    position: relative;
+    inline-size: 100%;
+    max-inline-size: var(--container-width);
+    margin-inline: auto;
+    min-height: 100vh;
 
+}
 
+/*Card Component*/
+.project-card,
+.card-skeleton {
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: 0;
 
+    inline-size: 18rem;
+}
 
+.project-card {
+    z-index: 1;
 
+    opacity: 0;
+    transition: none;
+}
+
+.project-card.is-visible {
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+.project-card.is-loaded {
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 0.5s ease;
+}
+
+.project-card__media {
+    position: relative;
+    overflow: hidden;
+    inline-size: 100%;
+}
+
+.project-card__media img {
+    display: block;
+    inline-size: 100%;
+    height: auto;
+
+    border-radius: 16px;
+
+    transition: transform 0.7s ease;
+    will-change: transform;
+}
+
+/* HOVER EFFECT: Zoom Image */
+.project-card:hover .project-card__media img {
+    transform: scale(1.05);
+}
+
+/* =========================================
+   4. HOVER OVERLAY
+   ========================================= */
+
+.project-card__overlay {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    padding: 1rem 0.5rem;
+
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Reveal on Hover */
+.project-card:hover .project-card__overlay {
+    opacity: 1;
+}
+
+/* =========================================
+   5. TYPOGRAPHY
+   ========================================= */
+
+.project-card__title {
+    align-self: flex-start;
+    font-size: 1.25rem;
+    color: var(--text-primary);
+
+    transform: translateY(-10px);
+    transition: transform 0.3s ease;
+}
+
+.project-card__year {
+    align-self: flex-end;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+
+    transform: translateY(10px);
+    transition: transform 0.3s ease 0.05s;
+}
+
+.project-card:hover .project-card__title,
+.project-card:hover .project-card__year {
+    transform: translateY(0);
+}
+
+/* =========================================
+   6. SKELETON LOADING
+   ========================================= */
+
+.card-skeleton {
+    z-index: 0;
+    background-color: #333333;
+    border-radius: 4px;
+
+    overflow: hidden;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+/* The Shimmer Animation */
+.card-skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    /* Moving Light Gradient */
+    background: linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.05) 50%,
+            transparent 100%
+    );
+
+    transform: translateX(-100%);
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
 
 
 
