@@ -248,6 +248,128 @@
     animation: shimmer 1.5s infinite;
 }
 
+/*CASE MODEL*/
+.case-modal {
+    inline-size: 100%;
+    block-size: 100%;
+
+    position: fixed;
+    inset: 0;
+
+    background: transparent;
+    outline: none;
+}
+
+.case-modal::backdrop {
+    background-color: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.case-modal__inner {
+    position: fixed;
+    inset: 0;
+
+    block-size: 100%;
+    inline-size: 100%;
+
+    user-select: none;
+
+}
+
+.case-modal__close-wrap {
+    position: absolute;
+    inset-block-start: 1.5rem;
+    inset-inline-end: 1.5rem;
+    z-index: var(--z-case-modal);
+
+    margin: 0;
+    padding: 0;
+    border: none;
+
+    place-items: center;
+}
+
+.case-modal__close-wrap:hover .case-modal__close{
+    background-color: var(--text-secondary);
+}
+
+.case-modal__close {
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 50%;
+}
+
+.case-modal__close .material-symbols-outlined {
+    color: var(--text-primary);
+    font-size: 2rem;
+}
+
+.case-modal__media {
+    position: absolute;
+    z-index: 1;
+
+    block-size: 100%;
+    inline-size: 100%;
+
+    display: grid;
+    place-items: center;
+}
+
+.case-modal__img {
+    inline-size: clamp(18rem, 90vw, 52rem);
+
+    max-block-size: 90vh;
+    object-fit: contain;
+}
+
+/* Minimal details panel */
+.case-modal__panel {
+    position: absolute;
+    inset-inline-start: 1.25rem;
+    inset-block-end: 2.5rem;
+    z-index: 2;
+
+    max-inline-size: min(32rem, calc(100% - 2.5rem));
+    padding: 1rem 1.25rem;
+}
+
+.case-modal__title {
+    font-size: 2rem;
+    line-height: 1.1;
+    -webkit-text-stroke: 1px var(--text-primary);
+}
+
+.case-modal__detail {
+    font-size: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    text-transform: uppercase;
+    line-height: 1.1;
+}
+
+
+/* Optional: make dialog feel crisp on open (no big motion) */
+@media (prefers-reduced-motion: no-preference) {
+    .case-modal {
+        animation: case-modal-fade 140ms ease-out both;
+    }
+
+    @keyframes case-modal-fade {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+}
+
+
 @keyframes shimmer {
     100% {
         transform: translateX(100%);

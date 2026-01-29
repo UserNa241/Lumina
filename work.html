@@ -14,7 +14,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Syncopate:wght@700&display=swap" rel="stylesheet">
-
 </head>
 
 <body>
@@ -69,6 +68,37 @@
 	
   </section>
 
+  
+  <!-- Case Overlay (HTML Shell) -->
+  <dialog class="case-modal" id="case-modal" aria-label="case-modal-title">
+    <div class="case-modal__inner">
+  
+      <!-- Close (top-right) -->
+      <form class="case-modal__close-wrap" method="dialog">
+        <button class="case-modal__close" type="submit" aria-label="Close case study">
+		  <span class="material-symbols-outlined">
+		  close
+		  </span>
+        </button>
+      </form>
+  
+      <!-- Fullscreen hero media -->
+      <figure class="case-modal__media">
+        <!-- JS will replace src/alt -->
+        <img class="case-modal__img" src="" alt="" />
+      </figure>
+	  
+      <aside class="case-modal__panel" aria-label="Case details">
+        <h2 class="case-modal__title" id="case-modal-title">Project Title</h2>
+		
+          <div class="case-modal__detail">
+            <p class="case-modal__value case-modal__year">2024</p>
+            <p class="case-modal__value case-modal__category">Branding</p>
+          </div>
+      </aside>
+  
+    </div>
+  </dialog>
 
 </main>
 

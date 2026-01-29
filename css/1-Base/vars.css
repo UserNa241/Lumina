@@ -36,6 +36,7 @@
 
     /*Z- INDEX LAYERS */
     --z-canvas: 1;
+    --z-case-modal:3;
     --z-content: 10;
     --z-work-header: 90;
     --z-fixed: 100;

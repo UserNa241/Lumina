@@ -6,6 +6,7 @@ import Canvas from './modules/Canvas.js';
 import HoverEffect from "./modules/HoverEffect.js";
 import FilterSystem from './modules/FilterSystem.js';
 import GridManager from './modules/GridManager.js';
+import CaseModal from "./modules/CaseModal.js";
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -16,11 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
     new HoverEffect();
     new FilterSystem();
     new GridManager();
-
+    new CaseModal();
     console.log('System Online: Canvas Initialized');
     console.log('System Online: HoverEffect Initialized');
     console.log('System: Filters Initialized');
     console.log('System: GridManager Initialized');
+    console.log('System: CaseModal Initialized');
 });
 
 

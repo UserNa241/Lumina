@@ -39,7 +39,7 @@ img, picture, video, svg, canvas {
 }
 
 /*3. Form Inheritance*/
-button, input, select, textarea {
+button, input, select, textarea, dialog {
     text-decoration: none;
     font: inherit;
     background: none;
