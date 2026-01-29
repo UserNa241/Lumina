@@ -321,7 +321,7 @@
 }
 
 .case-modal__img {
-    inline-size: clamp(18rem, 90vw, 52rem);
+    /*inline-size: clamp(18rem, 88vw, 90vw);*/
 
     max-block-size: 90vh;
     object-fit: contain;

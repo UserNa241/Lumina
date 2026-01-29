@@ -14,6 +14,7 @@ export default class CaseModal {
     this.title = this.dialog.querySelector(".case-modal__title");
     this.year = this.dialog.querySelector(".case-modal__year");
     this.category = this.dialog.querySelector(".case-modal__category");
+    this.media = this.dialog.querySelector(".case-modal__media");
 
     // Track the last focused element so we can restore focus on close
     this.lastFocus = null;
@@ -23,6 +24,7 @@ export default class CaseModal {
     this.onDialogClick = this.onDialogClick.bind(this);
     this.onDialogClose = this.onDialogClose.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
+    this.onBackDropClick = this.onBackDropClick.bind(this);
 
     this.init();
   }
@@ -39,6 +41,8 @@ export default class CaseModal {
 
     // ESC close fallback (dialog usually does this automatically, but this is safe)
     window.addEventListener("keydown", this.onKeyDown);
+
+    this.media.addEventListener("click", this.onBackDropClick);
   }
 
   onGridClick(e) {
@@ -125,5 +129,12 @@ export default class CaseModal {
     if (e.key === "Escape" && this.dialog.open) {
       this.close();
     }
+  }
+
+  onBackDropClick(e) {
+    // If user clicked the image itself, do nothing
+    if (e.target.closest(".case-modal__img")) return;
+
+    this.close();
   }
 }

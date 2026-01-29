@@ -1,70 +1,71 @@
 /* js/data/projects.js */
 
-// 1) Text Data Ingredients
 const CLIENTS = [
-	"Nike", "Tesla", "Aesop", "Spotify", "Apple", "Google", "SpaceX",
-	"Vogue", "Rolex", "Hermes", "Oura", "Sony", "NASA", "Polestar",
-	"Acne Studios", "MoMA", "Unreal", "Riot Games"
+  "Nike", "Tesla", "Aesop", "Spotify", "Apple", "Google", "SpaceX",
+  "Vogue", "Rolex", "Hermes", "Oura", "Sony", "NASA", "Polestar",
+  "Acne Studios", "MoMA", "Unreal", "Riot Games"
 ];
 
 const TYPES = [
-	"Campaign", "Interface", "Experience", "Rebrand", "System",
-	"Editorial", "Film", "Identity", "Exhibition", "Product"
+  "Campaign", "Interface", "Experience", "Rebrand", "System",
+  "Editorial", "Film", "Identity", "Exhibition", "Product"
 ];
 
 const CATEGORIES = ["branding", "digital", "motion"];
 
-// 2) Aspect presets (so heights vary like masonry)
-const ASPECTS = [
-	{w: 900, h: 1200}, // portrait
-	{w: 1200, h: 900}, // landscape
-	{w: 1000, h: 1000}, // square
-	{w: 1000, h: 1400}, // tall portrait
-	{w: 1400, h: 900}, // wide landscape
-];
+const MIN_DIM = 900;
+const MAX_DIM = 1400;
 
-// 3) Image URL generator (Picsum)
-function makeImageUrl({w, h}, seed) {
-	return `https://picsum.photos/seed/${seed}/${w}/${h}`;
+function randInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// 4) The Generator Function
+// random seed generator
+function randSeed() {
+  // crypto is best when available
+  if (window.crypto?.getRandomValues) {
+    const arr = new Uint32Array(2);
+    window.crypto.getRandomValues(arr);
+    return `${arr[0].toString(16)}${arr[1].toString(16)}`;
+  }
+  return Math.random().toString(16).slice(2) + Date.now().toString(16);
+}
+
+function makeImageUrl(seed, w, h) {
+  return `https://picsum.photos/seed/${seed}/${w}/${h}`;
+}
+
 export const generateBatch = (count = 12, startID = 1) => {
-	const batch = [];
+  const batch = [];
 
-	for (let i = 0; i < count; i++) {
-		const CurrentID = startID + i;
+  for (let i = 0; i < count; i++) {
+    const id = startID + i;
 
-		const client = CLIENTS[Math.floor(Math.random() * CLIENTS.length)];
-		const type = TYPES[Math.floor(Math.random() * TYPES.length)];
-		const category = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
-		const year = Math.floor(Math.random() * (2024 - 2020 + 1)) + 2020;
+    const client = CLIENTS[Math.floor(Math.random() * CLIENTS.length)];
+    const type = TYPES[Math.floor(Math.random() * TYPES.length)];
+    const category = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
+    const year = Math.floor(Math.random() * (2024 - 2020 + 1)) + 2020;
 
-		// Pick an aspect preset
-		const aspect = ASPECTS[Math.floor(Math.random() * ASPECTS.length)];
+    const imageWidth = randInt(MIN_DIM, MAX_DIM);
+    const imageHeight = randInt(MIN_DIM, MAX_DIM);
 
-		// Seed strategy:
-		// A) Stable per project id (recommended for consistent testing)
-		const seed = `lumina-${CurrentID}`;
+    // truly random per generation call
+    const seed = `lumina-${randSeed()}`;
+    const image = makeImageUrl(seed, imageWidth, imageHeight);
 
-		// If you want NEW random images every refresh, use instead:
-		// const seed = `lumina-${CurrentID}-${Math.floor(Math.random() * 1e9)}`;
+    batch.push({
+      id,
+      title: `${client} ${type}`,
+      category,
+      year,
 
-		const image = makeImageUrl(aspect, seed);
+      image,
+      imageWidth,
+      imageHeight,
+    });
+  }
 
-		batch.push({
-			id: CurrentID,
-			title: `${client} ${type}`,
-			category,
-			year,
-
-			image,                 // URL string (same as before)
-			imageWidth: aspect.w,  // NEW
-			imageHeight: aspect.h, // NEW
-		});
-	}
-
-	return batch;
+  return batch;
 };
 
 export const generateProjects = (count) => generateBatch(count, 1);
