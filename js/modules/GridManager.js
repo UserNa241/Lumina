@@ -7,51 +7,59 @@ export default class GridManager {
 		if (!this.grid) return;
 
 		/* -----------------------------
-		 HARD-CODED TUNING (for now)
+		 TUNING
 		 ----------------------------- */
-		this.idealWidth = 250;        // column target width (controls column count)
-		this.gap = 16;                // px gap between items
+		this.idealWidth = 250;
+		this.gap = 16;
 
-		// Runway trigger (scroll-driven, hysteresis)
-		this.enterPx = 1200;           // trigger when grid bottom is within this distance
-		this.exitPx = 2400;           // rearm after bottom is farther than this distance
-		this.rowsPerTrigger = 2;      // how many rows of skeleton runway to inject per trigger
+		// Trigger thresholds (distance to CONTENT bottom)
+		this.enterPx = 1800;   // when distance <= enterPx, we want to ensure buffer
+		this.exitPx = 3200;   // rearm when distance > exitPx
 
-		// Initial load runway
-		this.initialRows = 6;         // inject immediately on page load
+		// Reservation behavior
+		this.rowsPerTrigger = 3;
+		this.initialRows = 10;
 
-		// Premium swap cadence (row-by-row)
-		this.swapCadenceMs = 200;
+		// Premium cadence between row swaps
+		this.swapCadenceMs = 100;
 
-		// Skeleton visual variety (height = colWidth * ratio)
-		this.skeletonRatioMin = 0.5;
-		this.skeletonRatioMax = 1.0;
-
-		this.minPendingRows = 3;     // if queue drops below this while still in danger, jumpstart
-		this.maxPendingRows = 18;    // safety cap to prevent runaway skeleton buildup
-		this.lastJumpMs = 0;
-		this.jumpCooldownMs = 250;   // minimum time between jumpstarts
-
+		// HARD CAP: maximum pending skeleton rows (queue batches)
+		this.maxPendingRows = 10;
 
 		/* -----------------------------
 		 STATE
 		 ----------------------------- */
 		this.currentIdCount = 0;
-		this.queue = [];              // queued rows: { skeletons: [...] }
-		this.isResolving = false;
 
-		// Scroll trigger state
-		this.inDangerZone = false;
-		this.scrollTicking = false;
+		// queue items: { skeletons: [...], data: [...], preload: Promise }
+		this.queue = [];
+		this.isResolving = false;
 		this.isReserving = false;
 
+		this.inDangerZone = false;
+		this.scrollTicking = false;
+
+		// Masonry state
+		this.columns = 1;
+		this.colWidth = 0;
+		this.colHeights = [];
+		this.contentHeight = 0;
+		this.gridTopDoc = 0;
+
+		// Scroll lock state
+		this.scrollLocked = false;
+		this.lockedScrollY = 0;
+
+		this.preventScroll = (e) => {
+			if (e.deltaY > 0) e.preventDefault(); // block only downward
+		};
 		/* -----------------------------
 		 BIND
 		 ----------------------------- */
 		this.onScroll = this.onScroll.bind(this);
 		this.checkRunway = this.checkRunway.bind(this);
 		this.processQueue = this.processQueue.bind(this);
-		this.layout = this.layout.bind(this);
+		this.handleResize = this.handleResize.bind(this);
 
 		this.init();
 	}
@@ -60,31 +68,47 @@ export default class GridManager {
 	 INIT
 	 ========================================================= */
 	init() {
-		// 1) Initial skeleton runway
+		this.updateGridTopDoc();
+		this.syncMetrics(true);
+
+		// Start with up to maxPendingRows skeleton rows
 		this.reserveRows(this.initialRows);
+		this.commitHeight();
 
-		// 2) Commit layout/height so the page can scroll
-		this.layout();
-
-		// 3) Start resolving the initial rows
+		// Start resolving
 		this.processQueue();
 
-		// 4) Scroll-driven trigger (RAF-throttled)
 		window.addEventListener("scroll", this.onScroll, {passive: true});
-
-		// 5) Resize: relayout and re-check runway
-		window.addEventListener("resize", () => {
-			this.layout();
-			this.checkRunway();
-		});
+		window.addEventListener("resize", this.handleResize);
 
 		this.updateCounter();
 	}
 
 	/* =========================================================
-	 SCROLL TRIGGER (Hysteresis)
-	 - enterPx triggers once
-	 - exitPx rearms
+	 SCROLL LOCK (prevents reaching footer when buffer is capped)
+	 ========================================================= */
+	lockScroll() {
+		if (this.scrollLocked) return;
+		this.scrollLocked = true;
+		this.lockedScrollY = window.scrollY;
+
+		window.addEventListener("wheel", this.preventScroll, {passive: false});
+		window.addEventListener("touchmove", this.preventScroll, {passive: false});
+
+		// pin scroll position
+		window.scrollTo(0, this.lockedScrollY);
+	}
+
+	unlockScroll() {
+		if (!this.scrollLocked) return;
+		this.scrollLocked = false;
+
+		window.removeEventListener("wheel", this.preventScroll);
+		window.removeEventListener("touchmove", this.preventScroll);
+	}
+
+	/* =========================================================
+	 RAF-throttled scroll handler
 	 ========================================================= */
 	onScroll() {
 		if (this.scrollTicking) return;
@@ -96,73 +120,136 @@ export default class GridManager {
 		});
 	}
 
+	/* =========================================================
+	 RUNWAY CHECK
+	 Key rule:
+	 - If we are close to the end AND queue is already at max,
+	 lock scrolling so user never reaches footer/empty space.
+	 ========================================================= */
 	checkRunway() {
-		// distance from viewport bottom to grid bottom
-		const distance = this.grid.getBoundingClientRect().bottom - window.innerHeight;
+		const distance = this.getDistanceToContentBottom();
 
-		// Rearm when safely away
-		if (distance > this.exitPx) {
-			this.inDangerZone = false;
+		// If locked, unlock as soon as we have capacity to reserve again
+		// (i.e., queue dropped below cap due to a resolved row).
+		if (this.scrollLocked && this.queue.length < this.maxPendingRows) {
+			this.unlockScroll();
 		}
 
-		// Normal trigger: only once per enter/exit cycle
+		// Rearm when far away
+		if (distance > this.exitPx) {
+			this.inDangerZone = false;
+			return;
+		}
+
+		// If near end (or beyond), but we cannot reserve more pending rows -> lock
+		if (distance <= this.enterPx && this.queue.length >= this.maxPendingRows) {
+			this.lockScroll();
+			return;
+		}
+
+		// Normal trigger: reserve more when we enter the zone
 		if (!this.inDangerZone && distance <= this.enterPx) {
 			this.inDangerZone = true;
 
-			// Reserve runway instantly + layout immediately (expands scroll height)
 			this.reserveRows(this.rowsPerTrigger);
-			this.layout();
-
-			// Resolve in background (premium row swaps)
+			this.commitHeight();
 			this.processQueue();
-
-			return; // important: don't immediately fall through to jumpstart on same frame
+			return;
 		}
 
-		/* -----------------------------
-		 JUMPSTART FAILSAFE
-		 If we are still in danger but runway is running out,
-		 force another reserve even though inDangerZone is already true.
-		 ----------------------------- */
-		const pendingRows = this.queue.length;
-		const now = performance.now();
-
-		const shouldJump =
-			this.inDangerZone &&
-			distance <= this.enterPx &&
-			!this.isReserving &&
-			pendingRows < this.minPendingRows &&
-			pendingRows < this.maxPendingRows &&
-			(now - this.lastJumpMs) > this.jumpCooldownMs;
-
-		if (shouldJump) {
-			this.lastJumpMs = now;
-
-			this.reserveRows(this.rowsPerTrigger);
-			this.layout();
+		// If already in zone, keep it topped up (lightly) when capacity exists
+		if (this.inDangerZone && distance <= this.enterPx && this.queue.length < this.maxPendingRows) {
+			this.reserveRows(1); // gentle refill
+			this.commitHeight();
 			this.processQueue();
 		}
 	}
 
 	/* =========================================================
-	 RESERVATION (Skeleton injection)
+	 Distance math to CONTENT bottom (no runway spacer)
+	 ========================================================= */
+	updateGridTopDoc() {
+		const rect = this.grid.getBoundingClientRect();
+		this.gridTopDoc = rect.top + window.scrollY;
+	}
+
+	getDistanceToContentBottom() {
+		const viewportBottomDoc = window.scrollY + window.innerHeight;
+		const contentBottomDoc = this.gridTopDoc + this.contentHeight;
+		return contentBottomDoc - viewportBottomDoc;
+	}
+
+	/* =========================================================
+	 METRICS / RESIZE
+	 ========================================================= */
+	getMetrics() {
+		const containerWidth = this.grid.getBoundingClientRect().width;
+		const columns = Math.max(1, Math.floor(containerWidth / this.idealWidth));
+		const totalGap = (columns - 1) * this.gap;
+		const colWidth = (containerWidth - totalGap) / columns;
+		return {columns, colWidth};
+	}
+
+	syncMetrics(reset = false) {
+		const {columns, colWidth} = this.getMetrics();
+		const changed = columns !== this.columns;
+
+		this.columns = columns;
+		this.colWidth = colWidth;
+
+		if (reset || changed) {
+			this.colHeights = new Array(columns).fill(0);
+		}
+
+		return changed;
+	}
+
+	handleResize() {
+		// Never trap user on resize
+		this.unlockScroll();
+
+		this.syncMetrics(true);
+		this.relayoutAll();
+		this.commitHeight();
+		this.updateGridTopDoc();
+		this.checkRunway();
+	}
+
+	/* =========================================================
+	 RESERVATION (capped to maxPendingRows)
 	 ========================================================= */
 	reserveRows(rowCount) {
 		if (this.isReserving) return;
+		if (this.queue.length >= this.maxPendingRows) return;
+
 		this.isReserving = true;
 
 		try {
-			const {columns} = this.getMetrics();
+			const available = this.maxPendingRows - this.queue.length;
+			const rowsToAdd = Math.min(rowCount, available);
 
-			for (let r = 0; r < rowCount; r++) {
-				this.reserveOneRow(columns);
+			const changed = this.syncMetrics(false);
+			if (changed) this.relayoutAll();
+
+			for (let r = 0; r < rowsToAdd; r++) {
+				this.reserveOneRow(this.columns);
 			}
 		} finally {
 			this.isReserving = false;
 		}
 	}
 
+	getShortestColumnIndex() {
+		let min = 0;
+		for (let c = 1; c < this.colHeights.length; c++) {
+			if (this.colHeights[c] < this.colHeights[min]) min = c;
+		}
+		return min;
+	}
+
 	reserveOneRow(cols) {
+		const data = this.fetchBatchData(cols);
+
 		const frag = document.createDocumentFragment();
 		const skeletons = [];
 
@@ -170,21 +257,45 @@ export default class GridManager {
 			const el = document.createElement("div");
 			el.className = "card-skeleton";
 
-			const ratio =
-				(Math.random() * (this.skeletonRatioMax - this.skeletonRatioMin) + this.skeletonRatioMin)
-					.toFixed(3);
+			const w = data[i].imageWidth || 1;
+			const h = data[i].imageHeight || 1;
+			const ratio = h / w;
+			el.dataset.ratio = ratio.toFixed(3);
 
-			el.dataset.ratio = ratio;
+			const height = this.colWidth * ratio;
+			el.style.width = `${this.colWidth}px`;
+			el.style.height = `${height}px`;
+
+			const col = this.getShortestColumnIndex();
+			const x = col * (this.colWidth + this.gap);
+			const y = this.colHeights[col];
+
+			el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+			this.colHeights[col] += height + this.gap;
+
 			frag.appendChild(el);
 			skeletons.push(el);
 		}
 
 		this.grid.appendChild(frag);
-		this.queue.push({skeletons});
+
+		// Preload immediately; swap later only when loaded
+		const preload = this.preloadImages(data);
+		this.queue.push({skeletons, data, preload});
+	}
+
+	commitHeight() {
+		const maxHeight = Math.max(...this.colHeights);
+		this.contentHeight = Math.max(0, maxHeight - this.gap);
+		this.grid.style.height = `${this.contentHeight}px`;
+		this.updateGridTopDoc();
 	}
 
 	/* =========================================================
-	 RESOLUTION (Row-by-row swap, premium cadence)
+	 RESOLUTION
+	 After each row resolves:
+	 - queue shrinks -> unlock becomes possible
+	 - we re-check runway and refill if needed
 	 ========================================================= */
 	async processQueue() {
 		if (this.isResolving) return;
@@ -195,10 +306,9 @@ export default class GridManager {
 				const batch = this.queue.shift();
 				await this.resolveRow(batch);
 
-				// Relayout after each row swap
-				this.layout();
+				this.commitHeight();
+				this.checkRunway(); // this may unlock + reserve the next row
 
-				// Premium cadence
 				await this.delay(this.swapCadenceMs);
 			}
 		} finally {
@@ -207,21 +317,30 @@ export default class GridManager {
 	}
 
 	async resolveRow(batch) {
-		const count = batch.skeletons.length;
+		const {skeletons, data, preload} = batch;
 
-		const data = this.fetchBatchData(count);
-		await this.preloadImages(data);
+		await preload;
 
 		const cards = data.map((p) => this.createCard(p));
 
-		// Swap the whole row at once
-		for (let i = 0; i < count; i++) {
-			batch.skeletons[i].replaceWith(cards[i]);
+		for (let i = 0; i < skeletons.length; i++) {
+			const sk = skeletons[i];
+			const card = cards[i];
+
+			card.style.width = sk.style.width;
+			card.style.height = sk.style.height;
+			card.style.transform = sk.style.transform;
+			card.dataset.ratio = sk.dataset.ratio;
+
+			sk.replaceWith(card);
 		}
 
 		this.updateCounter();
 	}
 
+	/* =========================================================
+	 DATA + MEDIA
+	 ========================================================= */
 	fetchBatchData(count) {
 		const startId = this.currentIdCount + 1;
 		const data = generateBatch(count, startId);
@@ -235,21 +354,10 @@ export default class GridManager {
 				return new Promise((resolve) => {
 					const img = new Image();
 					img.src = p.image;
-
-					const done = () => {
-						const w = img.naturalWidth || 1;
-						const h = img.naturalHeight || 1;
-						p._ratio = h / w;
-						resolve();
-					};
-
-					if (img.complete) done();
+					if (img.complete) resolve();
 					else {
-						img.onload = done;
-						img.onerror = () => {
-							p._ratio = 1.2;
-							resolve();
-						};
+						img.onload = resolve;
+						img.onerror = resolve;
 					}
 				});
 			})
@@ -283,52 +391,27 @@ export default class GridManager {
 	}
 
 	/* =========================================================
-	 LAYOUT (Masonry, serial columns – NOT shortest-column)
+	 RELAYOUT (resize only)
 	 ========================================================= */
-	getMetrics() {
-		const containerWidth = this.grid.getBoundingClientRect().width;
-		const columns = Math.max(1, Math.floor(containerWidth / this.idealWidth));
-
-		const totalGap = (columns - 1) * this.gap;
-		const colWidth = (containerWidth - totalGap) / columns;
-
-		return {containerWidth, columns, colWidth};
-	}
-
-	layout() {
+	relayoutAll() {
 		const items = this.grid.querySelectorAll(".project-card, .card-skeleton");
-		if (!items.length) return;
 
-		const {columns, colWidth} = this.getMetrics();
+		this.colHeights = new Array(this.columns).fill(0);
 
-		// Pass 1: widths + skeleton heights (so measurement stable)
 		items.forEach((item) => {
-			item.style.width = `${colWidth}px`;
+			const ratio = parseFloat(item.dataset.ratio || "1.2");
+			const h = this.colWidth * ratio;
 
-			if (item.classList.contains("card-skeleton")) {
-				const ratio = parseFloat(item.dataset.ratio || "1.2");
-				item.style.height = `${colWidth * ratio}px`;
-			}
-		});
+			item.style.width = `${this.colWidth}px`;
+			item.style.height = `${h}px`;
 
-		// Pass 2: serial masonry placement
-		const colHeights = new Array(columns).fill(0);
-
-		for (let i = 0; i < items.length; i++) {
-			const item = items[i];
-			const col = i % columns;
-
-			const x = col * (colWidth + this.gap);
-			const y = colHeights[col];
+			const col = this.getShortestColumnIndex();
+			const x = col * (this.colWidth + this.gap);
+			const y = this.colHeights[col];
 
 			item.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-
-			const h = item.offsetHeight;
-			colHeights[col] += h + this.gap;
-		}
-
-		const maxHeight = Math.max(...colHeights);
-		this.grid.style.height = `${Math.max(0, maxHeight - this.gap)}px`;
+			this.colHeights[col] += h + this.gap;
+		});
 	}
 
 	updateCounter() {
