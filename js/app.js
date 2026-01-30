@@ -16,8 +16,15 @@ document.addEventListener('DOMContentLoaded', () => {
     new Canvas({ canvasId: 'hero-canvas' });
     new HoverEffect();
     new FilterSystem();
-    new GridManager();
+    const gridManager = new GridManager();
     new CaseModal();
+    new FilterSystem(
+        {
+            onFilterChange: (category) => {
+                gridManager.filter(category);
+            }
+        }
+    );
     console.log('System Online: Canvas Initialized');
     console.log('System Online: HoverEffect Initialized');
     console.log('System: Filters Initialized');

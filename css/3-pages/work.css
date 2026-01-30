@@ -217,8 +217,42 @@
     transform: translateY(0);
 }
 
+
 /* =========================================
-   6. SKELETON LOADING
+   GATEWAY CARD (Navigation Injection)
+   Selector: [data-category="gateway"]
+   ========================================= */
+
+/*Container*/
+.project-card[data-category="gateway"] .project-card__overlay {
+
+    opacity: 1;
+
+    transform: translateY(0px);
+}
+
+.project-card[data-category="gateway"] .project-card__title {
+
+    font-size: clamp(1rem, 2.5rem, 8rem);
+    line-height: 1;
+    transform: translateY(0px);
+}
+
+.project-card[data-category="gateway"] .project-card__year {
+    font-size: 1.5rem;
+    align-self: flex-start;
+    transform: translateY(0px);
+
+}
+
+.project-card[data-category="gateway"]:hover .project-card__title,
+.project-card[data-category="gateway"]:hover .project-card__year {
+    transform: translateY(0);
+}
+
+
+/* =========================================
+    SKELETON LOADING
    ========================================= */
 
 .card-skeleton {
@@ -290,7 +324,7 @@
     place-items: center;
 }
 
-.case-modal__close-wrap:hover .case-modal__close{
+.case-modal__close-wrap:hover .case-modal__close {
     background-color: var(--text-secondary);
 }
 
@@ -352,6 +386,31 @@
     line-height: 1.1;
 }
 
+.floating-next {
+    position: fixed;
+    inset-inline-end: 1rem;
+    inset-block-end: 2rem;
+
+
+    display: inline-grid;
+    place-items: center;
+
+    z-index: var(--z-fixed);
+
+}
+
+.floating-next .material-symbols-outlined {
+    color: var(--text-secondary);
+    font-size: 32px;
+    padding: 1rem;
+    border-radius: 50%;
+
+    background-color: pink;
+}
+
+.floating-next:hover .material-symbols-outlined {
+    background-color: var(--text-primary);
+}
 
 /* Optional: make dialog feel crisp on open (no big motion) */
 @media (prefers-reduced-motion: no-preference) {

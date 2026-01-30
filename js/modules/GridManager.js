@@ -30,6 +30,7 @@ export default class GridManager {
 		 STATE
 		 ----------------------------- */
 		this.currentIdCount = 0;
+		this.activeFilter = 'all'; // Default state
 
 		// queue items: { skeletons: [...], data: [...], preload: Promise }
 		this.queue = [];
@@ -132,6 +133,7 @@ export default class GridManager {
 		// If locked, unlock as soon as we have capacity to reserve again
 		// (i.e., queue dropped below cap due to a resolved row).
 		if (this.scrollLocked && this.queue.length < this.maxPendingRows) {
+			console.log("Unlock Done");
 			this.unlockScroll();
 		}
 
@@ -142,7 +144,8 @@ export default class GridManager {
 		}
 
 		// If near end (or beyond), but we cannot reserve more pending rows -> lock
-		if (distance <= this.enterPx && this.queue.length >= this.maxPendingRows) {
+		if (distance <= (this.enterPx / 6) && this.queue.length >= this.maxPendingRows) {
+			console.log("Lock Initiated");
 			this.lockScroll();
 			return;
 		}
@@ -254,6 +257,8 @@ export default class GridManager {
 		const skeletons = [];
 
 		for (let i = 0; i < cols; i++) {
+			const project = data[i];
+
 			const el = document.createElement("div");
 			el.className = "card-skeleton";
 
@@ -266,12 +271,23 @@ export default class GridManager {
 			el.style.width = `${this.colWidth}px`;
 			el.style.height = `${height}px`;
 
-			const col = this.getShortestColumnIndex();
-			const x = col * (this.colWidth + this.gap);
-			const y = this.colHeights[col];
 
-			el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-			this.colHeights[col] += height + this.gap;
+			const isMatch = (this.activeFilter === "all") || (project.category === this.activeFilter);
+
+			if (isMatch) {
+				const col = this.getShortestColumnIndex();
+				const x = col * (this.colWidth + this.gap);
+				const y = this.colHeights[col];
+
+				el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+
+				el.style.display = "block";
+
+				this.colHeights[col] += height + this.gap;
+			} else {
+				el.style.display = "none";
+				el.style.transform = `translate3d(0px, 0px, 0)`;
+			}
 
 			frag.appendChild(el);
 			skeletons.push(el);
@@ -317,6 +333,7 @@ export default class GridManager {
 	}
 
 	async resolveRow(batch) {
+
 		const {skeletons, data, preload} = batch;
 
 		await preload;
@@ -331,6 +348,7 @@ export default class GridManager {
 			card.style.height = sk.style.height;
 			card.style.transform = sk.style.transform;
 			card.dataset.ratio = sk.dataset.ratio;
+			card.style.display = sk.style.display;
 
 			sk.replaceWith(card);
 		}
@@ -382,7 +400,8 @@ export default class GridManager {
     `;
 
 		el.classList.add("is-visible");
-		setTimeout(() => el.classList.add("is-loaded"), 600);
+		setTimeout(() => el.classList.add("is-loaded"), 100);
+
 		return el;
 	}
 
@@ -399,6 +418,10 @@ export default class GridManager {
 		this.colHeights = new Array(this.columns).fill(0);
 
 		items.forEach((item) => {
+
+			// If the item is hidden by the filter, skip the math entirely.
+			if (item.style.display === 'none') return;
+
 			const ratio = parseFloat(item.dataset.ratio || "1.2");
 			const h = this.colWidth * ratio;
 
@@ -414,10 +437,39 @@ export default class GridManager {
 		});
 	}
 
+	filter(category) {
+		this.activeFilter = category;
+
+		const items = this.grid.querySelectorAll('.project-card');
+
+		items.forEach(el => {
+			const cat = el.dataset.category;
+			const match = (category === 'all') || (cat === category);
+
+			// VISIBILITY LOGIC
+			el.style.display = match ? 'block' : 'none';
+		});
+
+		// LAYOUT LOGIC
+		this.relayoutAll();
+
+		this.updateCounter();
+	}
+
 	updateCounter() {
 		const counter = document.querySelector(".work-count");
 		if (!counter) return;
-		const count = this.grid.querySelectorAll(".project-card").length;
-		counter.textContent = `(${count})`;
+
+		const allCards = this.grid.querySelectorAll(".project-card");
+
+		// Count only visible items
+		let visibleCount = 0;
+		allCards.forEach(card => {
+			if (card.style.display !== 'none') {
+				visibleCount++;
+			}
+		});
+
+		counter.textContent = `(${visibleCount})`;
 	}
 }

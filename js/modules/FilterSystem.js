@@ -2,7 +2,7 @@
 
 export default class FilterSystem {
 
-	constructor() {
+	constructor( {onFilterChange} = {} ) {
 
 		//1. Select Elements
 		// EVENT DELEGATION
@@ -18,6 +18,8 @@ export default class FilterSystem {
 
 		// 2. BINDING
 		this.handleClick = this.handleClick.bind(this);
+
+		this.onFilterChange = onFilterChange;
 
 		this.init();
 	}
@@ -40,7 +42,7 @@ export default class FilterSystem {
 		// 5. IDENTIFY TARGET
 		const clickedBtn = e.target.closest('.filter-btn');
 
-		if(! clickedBtn) return;
+		if (!clickedBtn) return;
 
 		// 6.UPDATE STATE
 		this.buttons.forEach(button => button.setAttribute('aria-pressed', 'false'));
@@ -48,6 +50,14 @@ export default class FilterSystem {
 		clickedBtn.setAttribute('aria-pressed', 'true');
 
 		this.MoveGlider(clickedBtn);
+
+		// Get the value: "branding", "digital", or "all"
+		const category = clickedBtn.dataset.filter;
+
+		// Check if a callback was provided, then run it
+		if (this.onFilterChange) {
+			this.onFilterChange(category);
+		}
 	}
 
 	MoveGlider(btn) {
