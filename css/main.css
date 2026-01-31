@@ -26,3 +26,6 @@
 
 /*Work Page Sheet*/
 @import url("3-pages/work.css") layer(pages);
+
+/*About Page Sheet*/
+@import url("3-pages/about.css") layer(pages);

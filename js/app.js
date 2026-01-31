@@ -7,6 +7,8 @@ import HoverEffect from "./modules/HoverEffect.js";
 import FilterSystem from './modules/FilterSystem.js';
 import GridManager from './modules/GridManager.js';
 import CaseModal from "./modules/CaseModal.js";
+import CircularText from "./modules/CircularText.js";
+import ScrollSync from "./modules/ScrollSync.js";
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -25,11 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     );
+	new CircularText();
+	new ScrollSync();
     console.log('System Online: Canvas Initialized');
     console.log('System Online: HoverEffect Initialized');
     console.log('System: Filters Initialized');
     console.log('System: GridManager Initialized');
     console.log('System: CaseModal Initialized');
+	console.log('System: CircularText Initialized');
+	console.log('System: ScrollSync Initialized');
 });
 
 

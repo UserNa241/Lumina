@@ -410,6 +410,7 @@
 
 .floating-next:hover .material-symbols-outlined {
     background-color: var(--text-primary);
+    box-shadow: 0 0 8px var(--text-primary);
 }
 
 /* Optional: make dialog feel crisp on open (no big motion) */
