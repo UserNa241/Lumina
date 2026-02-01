@@ -274,14 +274,15 @@
 /* --- INTERACTION STATES --- */
 
 /* HOVER STATE: ACTIVE ITEM */
-.work-list__item.is-active .work-list__link {
-    /*Change text color*/
-    color: var(--accent);
-}
+/*.work-list__item.is-active .work-list__link {*/
+/*    !*Change text color*!*/
+/*    color: var(--accent);*/
+/*}*/
 
 .work-list__item.is-active .work-list__name {
     /*Slide text to right*/
     transform: translateX(2rem);
+    color: var(--accent);
 }
 
 /* HOVER STATE: INACTIVE ITEMS (Spotlight) */

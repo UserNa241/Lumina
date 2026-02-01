@@ -8,6 +8,14 @@
     padding: 0;
 }
 
+html {
+    /* 1. Always reserve space for the scrollbar */
+    scrollbar-gutter: stable;
+
+    scroll-behavior: smooth;
+}
+
+
 ::-webkit-scrollbar{
     width: 12px;
 }
