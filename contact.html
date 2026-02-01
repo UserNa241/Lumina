@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  
+	<title>LUMINA | Start a Project</title>
+	
+	<!--  Linking the main stylesheet-->
+	<link rel="stylesheet" href="css/main.css">
+	<script src="js/app.js" type="module" defer></script>
+	
+	<!--  Google Fonts Import-->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Syncopate:wght@700&display=swap" rel="stylesheet">
+	<!-- FontAwesome CDN -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="is-dark">
+
+<!--Nav Trigger-->
+<nav class="nav-trigger" aria-label="Main Menu Control">
+  <!--  Interactive Button-->
+  <button class="nav-trigger__btn" aria-label="Open Menu" aria-expanded="false">
+	MENU
+  </button>
+</nav>
+
+<div class="contact-card-wrapper">
+
+	<aside class="contact-sidebar">
+		
+		<h1 class="contact-title" data-scramble>Let's Talk</h1>
+		
+		<div class="contact-methods">
+		
+			<!-- Item-1 -->
+			<div class="method-item">
+				<div class="method-icon">
+					<span class="material-symbols-outlined">mail</span>
+				</div>
+				<div class="method-text">
+					<h3>Chat with us</h3>
+					<p>Our friendly team is here</p>
+					<button class="copy-link" data-copy="hello@lumina.agency">hello@lumina.agency</button>
+				</div>
+			</div>
+			
+			<!-- Item-2 -->
+			<div class="method-item">
+				<div class="method-icon">
+					<span class="material-symbols-outlined">location_on</span>
+				</div>
+				<div class="method-text">
+					<h3>Visit us</h3>
+					<p>Come say hello at HQ</p>
+					<address>1200 Digital Blvd, LA</address>
+				</div>
+			</div>
+			
+			<!-- Item-3 -->
+			<div class="method-item">
+				<div class="method-icon">
+					<span class="material-symbols-outlined">call</span>
+				</div>
+				<div class="method-text">
+					<h3>Call us</h3>
+					<p>Mon-Fri from 8am to 5pm.</p>
+					<a href="tel:+15550000000">+1 (555) 000-0000</a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="contact-socials">
+			<a href="#"><i class="fa-brands fa-instagram"></i></a>
+			<a href="#"><i class="fa-brands fa-twitter"></i></a>
+			<a href="#"><i class="fa-brands fa-linkedin"></i></a>
+			<a href="#"><i class="fa-brands fa-youtube"></i></a>
+			<a href="#"><i class="fa-brands fa-facebook-square"></i></a>
+		</div>
+		
+	</aside>
+	
+	<!-- Right : The Form Class -->
+	
+	<section class="form-card">
+	        
+		<div class="form-header">
+			<h2>Got ideas? We've got the skills. Let's team up.</h2>
+			<p>Tell us more about yourself and what you're got in mind.</p>
+		</div>
+	
+		<form class="clean-form">
+	            
+			<!-- Standard Inputs -->
+			<div class="input-group">
+				<input type="text" placeholder="Your Name">
+			</div>
+	
+			<div class="input-group">
+				<input type="email" placeholder="you@company.com">
+			</div>
+	
+			<div class="input-group">
+				<textarea rows="3" placeholder="Tell us a little about the project..."></textarea>
+			</div>
+			
+			<!-- Checkboxes (Services) -->
+			<div class="checkbox-group-wrapper">
+				<label>How can we help?</label>
+				<div class="checkbox-grid">
+					<label class="check-box">
+						<input type="checkbox"> <span>Website Design</span>
+					</label>
+					<label class="check-box">
+						<input type="checkbox"> <span>UX Design</span>
+					</label>
+					<label class="check-box">
+						<input type="checkbox"> <span>Content Creation</span>
+					</label>
+					<label class="check-box">
+						<input type="checkbox"> <span>Strategy</span>
+					</label>
+				</div>
+			</div>
+			
+			<button type="submit" class="card-submit-btn">Let's get started!</button>
+		</form>
+		
+		
+	
+	</section>
+	
+</div>
+
+
+
+
+
+
+
+
+</body>
+</html>

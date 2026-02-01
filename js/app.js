@@ -9,6 +9,7 @@ import GridManager from './modules/GridManager.js';
 import CaseModal from "./modules/CaseModal.js";
 import CircularText from "./modules/CircularText.js";
 import ScrollSync from "./modules/ScrollSync.js";
+import TextScramble from "./modules/TextScramble.js";
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -29,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     );
 	new CircularText();
 	new ScrollSync();
+	new TextScramble();
     console.log('System Online: Canvas Initialized');
     console.log('System Online: HoverEffect Initialized');
     console.log('System: Filters Initialized');
@@ -36,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('System: CaseModal Initialized');
 	console.log('System: CircularText Initialized');
 	console.log('System: ScrollSync Initialized');
+	console.log('System: TextScramble Initialized');
 });
 
 

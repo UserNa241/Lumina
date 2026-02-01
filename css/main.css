@@ -29,3 +29,6 @@
 
 /*About Page Sheet*/
 @import url("3-pages/about.css") layer(pages);
+
+/*Contact Page Sheet*/
+@import url("3-pages/contact.css") layer(pages);
