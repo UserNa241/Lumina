@@ -3,35 +3,25 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   
-  <title>LUMINA | Digital Experience</title>
+	<title>LUMINA | Digital Experience</title>
 	
 	<!--  Linking the main stylesheet-->
-  <link rel="stylesheet" href="css/main.css">
-  <script src="js/app.js" type="module" defer></script>
+	<link rel="stylesheet" href="css/main.css">
+	<script src="js/app.js" type="module" defer></script>
 	
-	<!--  Google Fonts Import-->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Syncopate:wght@700&display=swap" rel="stylesheet">
-	<!-- FontAwesome CDN -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 </head>
 
 <body>
 
-
 <!--Nav Trigger-->
 <nav class="nav-trigger" aria-label="Main Menu Control">
-  
-  <!--  Interactive Button-->
-  <button class="nav-trigger__btn" aria-label="Open Menu" aria-expanded="false">
-	MENU
-  </button>
-
+	<!--  Interactive Button-->
+	<button class="nav-trigger__btn" aria-label="Open Menu" aria-expanded="false">
+		MENU
+	</button>
 </nav>
 
 <!-- THE VISUAL MENU -->
@@ -110,133 +100,143 @@
 <div class="page-wrapper">
   
   
-  <main>
+	<main>
 	
-	<!-- Hero Section-->
-	<section class="hero" aria-label="Introduction">
+		<!-- Hero Section-->
+		<section class="hero" aria-label="Introduction">
 	  
-	  <!--Background Layer-->
-	  <canvas id="hero-canvas" class="hero-canvas"></canvas>
-	  <div class="hero__content">
-		<h1 class="hero__title">Lumina</h1>
-		<p class="hero__subtitle">Digital Alchemy</p>
-	  </div>
+			<!--Background Layer-->
+			<canvas id="hero-canvas" class="hero-canvas"></canvas>
+			<div class="hero__content">
+				<h1 class="hero__title">Lumina</h1>
+				<p class="hero__subtitle">Digital Alchemy</p>
+			</div>
 	
-	</section>
-	
-	
-	<!--  Section 2 : Kinetic Manifesto-->
-	<section class="manifesto" aria-label="Agency Manifesto">
+		</section>
+		
+		
+		<!--  Section 2 : Kinetic Manifesto-->
+		<section class="manifesto" aria-label="Agency Manifesto">
 	  
-	  <!--	1. Infinite Marquee-->
-	  <div class="marquee" aria-hidden="true">
-		<div class="marquee__inner">
+			<!--	1. Infinite Marquee-->
+			<div class="marquee" aria-hidden="true">
+				<div class="marquee__inner">
 		  
-		  <span class="marquee__text">WE BUILD WORLDS - DIGITAL ALCHEMY</span>
-		  <span class="marquee__text">WE BUILD WORLDS - DIGITAL ALCHEMY</span>
+					<span class="marquee__text">WE BUILD WORLDS - DIGITAL ALCHEMY</span>
+					<span class="marquee__text">WE BUILD WORLDS - DIGITAL ALCHEMY</span>
 		
-		</div>
-	  </div>
-	  
-	  <!--	2. Floating Images-->
-	  <div class="manifesto__images">
-		
-		<!--	  PlaceHolders-->
-		<div class="float-card float-card--1"></div>
-		<div class="float-card float-card--2"></div>
-		<div class="float-card float-card--3"></div>
-	  
-	  </div>
-	</section>
-	
-	
-	<!--  3. Work Section-->
-	<section class="work-list">
-	  
-	  <!--	Container-->
-	  <div class="work-list__container">
-		
-		
-		<!--	  Header-->
-		<header class="work-list__header">
-		  
-		  <h2 class="work-list__title">Selected Work</h2>
-		  <span class="work-list__count">(04)</span>
-		
-		</header>
-		
-		<!--		List Wrapper-->
-		<ul class="work-list__list">
-		  
-		  <!--	  Element: Item Row-->
-		  <li class="work-list__item">
+				</div>
+			</div>
 			
-			<a href="work.html" class="work-list__link">
-			  <span class="work-list__name">Nike Air Max</span>
-			  <span class="work-list__cat">Campaign</span>
-			</a>
-			<img src="assets/images/nike-red-shoe.jpg" alt="Nike Air Max campaign visual" class="work-list__preview" aria-hidden="true">
+			<!--	2. Floating Images-->
+			<div class="manifesto__images">
+		
+				<!-- Image 1 (Fast) -->
+				<div class="float-card float-card--1" data-speed="0.2">
+					<img src="https://picsum.photos/seed/lumina-float1/600/800" alt="Abstract Art 1">
+				</div>
+				
+				<!-- Image 2 (Medium) -->
+				<div class="float-card float-card--2" data-speed="0.1">
+					<img src="https://picsum.photos/seed/lumina-float2/600/800" alt="Abstract Art 2">
+				</div>
+				
+				<!-- Image 3 (Slow) -->
+				<div class="float-card float-card--3" data-speed="0.05">
+					<img src="https://picsum.photos/seed/lumina-float3/600/800" alt="Abstract Art 3">
+				</div>
+				
+			</div>
+		</section>
+		
+		
+		<!--  3. Work Section-->
+		<section class="work-list">
+	  
+			<!--	Container-->
+			<div class="work-list__container">
+		
+		
+				<!--	  Header-->
+				<header class="work-list__header">
 		  
-		  </li>
+					<h2 class="work-list__title">Selected Work</h2>
+					<span class="work-list__count">(04)</span>
+		
+				</header>
+				
+				<!--		List Wrapper-->
+				<ul class="work-list__list">
 		  
-		  <!--		Item 2-->
-		  <li class="work-list__item">
+					<!--	  Element: Item Row-->
+					<li class="work-list__item">
 			
-			<a href="work.html" class="work-list__link">
-			  <span class="work-list__name">Spotify Wrapped</span>
-			  <span class="work-list__cat">Interactive</span>
-			</a>
-			<img src="assets/images/spotify.jpg" alt="Spotify Wrapped data visualization" class="work-list__preview" aria-hidden="true">
+						<a href="work.html" class="work-list__link">
+							<span class="work-list__name">Nike Air Max</span>
+							<span class="work-list__cat">Campaign</span>
+						</a>
+						<img src="assets/images/nike-red-shoe.jpg" alt="Nike Air Max campaign visual" class="work-list__preview" aria-hidden="true">
 		  
-		  </li>
+					</li>
+					
+					<!--		Item 2-->
+					<li class="work-list__item">
+			
+						<a href="work.html" class="work-list__link">
+							<span class="work-list__name">Spotify Wrapped</span>
+							<span class="work-list__cat">Interactive</span>
+						</a>
+						<img src="assets/images/spotify.jpg" alt="Spotify Wrapped data visualization" class="work-list__preview" aria-hidden="true">
 		  
-		  <!-- ITEM 3 -->
-		  <li class="work-list__item">
-			<a href="work.html" class="work-list__link">
-			  <span class="work-list__name">Aesop Skin</span>
-			  <span class="work-list__cat">eCommerce</span>
-			</a>
-			<img src="assets/images/Bottle.jpg" alt="Aesop product photography" class="work-list__preview" aria-hidden="true">
-		  </li>
-		  
-		  <!-- ITEM 4 -->
-		  <li class="work-list__item">
-			<a href="work.html" class="work-list__link">
-			  <span class="work-list__name">Tesla Cybertruck</span>
-			  <span class="work-list__cat">3D Configurator</span>
-			</a>
-			<img src="assets/images/Tesla-CyberTruck.jpg" alt="Cybertruck 3D model render" class="work-list__preview" aria-hidden="true">
-		  </li>
-		</ul>
-	  </div>
-	</section>
+					</li>
+					
+					<!-- ITEM 3 -->
+					<li class="work-list__item">
+						<a href="work.html" class="work-list__link">
+							<span class="work-list__name">Aesop Skin</span>
+							<span class="work-list__cat">eCommerce</span>
+						</a>
+						<img src="assets/images/Bottle.jpg" alt="Aesop product photography" class="work-list__preview" aria-hidden="true">
+					</li>
+					
+					<!-- ITEM 4 -->
+					<li class="work-list__item">
+						<a href="work.html" class="work-list__link">
+							<span class="work-list__name">Tesla Cybertruck</span>
+							<span class="work-list__cat">3D Configurator</span>
+						</a>
+						<img src="assets/images/Tesla-CyberTruck.jpg" alt="Cybertruck 3D model render" class="work-list__preview" aria-hidden="true">
+					</li>
+				</ul>
+			</div>
+		</section>
   
-  </main>
+	</main>
 </div>
 
 <!--The Footer-->
 <footer class="footer" id="contact">
-  <div class="footer__content">
+	<div class="footer__content">
 	
-	<!--	Call to action-->
-	<h2 class="footer__cta">Let's Create <br> the future</h2>
-	
-	<!--	Magnetic Button-->
-	<a href="contact.html" class="footer__btn">
-	  <span class="footer__btn-text">Start Project</span>
-	</a>
-  </div>
+		<!--	Call to action-->
+		<h2 class="footer__cta">Let's Create <br> the future</h2>
+		
+		<!--	Magnetic Button-->
+		<a href="contact.html" class="footer__btn">
+			<span class="footer__btn-text">Start Project</span>
+		</a>
+	</div>
 	
 	<!--	Bottom info-->
 	<div class="footer__bottom">
-	  <span class="footer__copyright">&copy; 2024 Lumina.</span>
+		<span class="footer__copyright">&copy; 2024 Lumina.</span>
 	  
-	  <nav class="footer__socials" aria-label="Social Links">
-		<a href="#" class="footer__link">Instagram</a>
-		<a href="#" class="footer__link">LinkedIn</a>
-	  </nav>
+		<nav class="footer__socials" aria-label="Social Links">
+			<a href="#" class="footer__link">Instagram</a>
+			<a href="#" class="footer__link">LinkedIn</a>
+		</nav>
 	</div>
- 
+
 </footer>
 
 

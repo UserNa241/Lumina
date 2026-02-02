@@ -11,6 +11,7 @@ import CircularText from "./modules/CircularText.js";
 import ScrollSync from "./modules/ScrollSync.js";
 import TextScramble from "./modules/TextScramble.js";
 import Navigation from "./modules/Navigation.js";
+import Manifesto from "./modules/Manifesto.js";
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -33,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	new ScrollSync();
 	new TextScramble();
 	new Navigation();
+	new Manifesto();
     console.log('System Online: Canvas Initialized');
     console.log('System Online: HoverEffect Initialized');
     console.log('System: Filters Initialized');

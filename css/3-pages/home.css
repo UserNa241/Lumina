@@ -101,7 +101,6 @@
     display: flex;
     gap: 4rem;
 
-    animation: scroll-left 20s linear infinite;
     white-space: nowrap;
     will-change: transform;
 }
@@ -156,6 +155,12 @@
 
     /*Performance*/
     will-change: transform;
+}
+
+.float-card img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
 }
 
 /*Top Left*/

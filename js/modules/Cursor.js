@@ -5,8 +5,8 @@ export class Cursor {
 	constructor() {
 
 		// Data Source
-		this.x = 0;
-		this.y = 0;
+		this.x = -1000;
+		this.y = -1000;
 		this.lastX = 0;
 		this.lastY = 0;
 		this.velX = 0;

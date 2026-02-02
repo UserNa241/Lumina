@@ -201,6 +201,11 @@
 
 
 /* Checkboxes */
+
+.checkbox-group-wrapper{
+    padding-inline-start: 0.75rem;
+}
+
 .checkbox-group-wrapper label {
     font-weight: 600;
     color: var(--text-secondary);
