@@ -20,6 +20,9 @@ export default class HoverEffect {
   }
 
   init() {
+
+	  if (window.innerWidth <= 768) return;
+
     this.list.addEventListener("mouseover", this.handleListOver);
     this.list.addEventListener("mouseleave", this.handleListLeave);
 

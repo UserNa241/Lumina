@@ -29,6 +29,9 @@ export default class Canvas {
 	}
 
 	init() {
+
+		if (window.innerWidth <= 768) return;
+
 		// Set Canvas to full width
 		this.resize();
 

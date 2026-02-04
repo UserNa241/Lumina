@@ -11,8 +11,8 @@
 /*}*/
 
 .contact-card-wrapper {
-    inline-size: 100vw;
-    block-size: 100vh;
+    /*inline-size: 100vw;*/
+    /*block-size: 100vh;*/
     background-color: var(--bg-primary);
 
     display: grid;
@@ -63,7 +63,7 @@
 }
 
 .method-text h3 {
-    font-size: 2rem;
+    font-size: clamp(1.5rem, 2.5rem, 6rem);
     color: var(--text-primary);
 }
 
@@ -280,7 +280,7 @@
 }
 
 /*RESPONSIVE*/
-@media (max-width: 1000px) {
+@media (max-width: 768px) {
     .contact-card-wrapper {
         grid-template-columns: 1fr;
         padding: 0;
@@ -288,5 +288,9 @@
     .form-card {
         border-radius: 2rem 2rem 0 0; /* Bottom sheet style? */
         padding: 2rem;
+    }
+
+    .contact-socials {
+        max-inline-size: 100%;
     }
 }

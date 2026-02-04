@@ -98,7 +98,18 @@
     color: var(--text-primary);
 }
 
+@media (max-width: 768px) {
 
+    .footer__bottom {
+        align-items: center;
+        justify-content: center;
+        border-block-start: 1px solid var(--border-subtle);
+    }
+
+    .footer__socials{
+        display: none;
+    }
+}
 
 
 

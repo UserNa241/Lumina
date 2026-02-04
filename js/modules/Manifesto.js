@@ -13,7 +13,7 @@ export default class Manifesto {
 		this.lastScrollY = 0;
 		this.pos = 0;
 
-		this.baseSpeed = 3;
+		this.baseSpeed = 1;
 
 		this.render = this.render.bind(this);
 

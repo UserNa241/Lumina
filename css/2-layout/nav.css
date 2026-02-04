@@ -1,8 +1,7 @@
-
 /*css/2-layout/nav.css*/
 
 /*The Fixed Container*/
-.nav-trigger{
+.nav-trigger {
     position: fixed;
 
     /*Pin to Top Right*/
@@ -15,8 +14,8 @@
     mix-blend-mode: difference;
 }
 
-.nav-trigger__btn{
-    font-family: var(--font-primary),sans-serif;
+.nav-trigger__btn {
+    font-family: var(--font-primary), sans-serif;
     font-size: 1rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -32,9 +31,10 @@
 }
 
 
-.nav-trigger__btn:hover{
+.nav-trigger__btn:hover {
     opacity: 0.7;
 }
+
 .menu-overlay {
     position: fixed;
     inset: 0;
@@ -80,9 +80,13 @@
     overflow: hidden;
 
     border-right: 1px solid var(--border-subtle);
+
+    container-type: inline-size;
 }
 
 .menu-link {
+
+
     display: block;
     inline-size: 100%;
     block-size: 100%;
@@ -115,7 +119,7 @@
     z-index: 1;
 
     font-family: var(--font-display);
-    font-size: 2rem;
+    font-size: clamp(1.5rem, 15cqi, 4rem);
     text-transform: uppercase;
     text-align: right;
 
@@ -131,7 +135,7 @@
     color: var(--text-secondary);
 }
 
-.menu-item:hover .menu-bg img{
+.menu-item:hover .menu-bg img {
 
     filter: grayscale(0%) brightness(1);
     transform: scale(1.05);
@@ -171,7 +175,7 @@
 
 .menu-info__title {
     font-family: var(--font-display);
-    font-size: clamp(2rem, 20cqi, 5rem);
+    font-size: clamp(2rem, 10cqi, 5rem);
     /*font-size: clamp(1rem, 90cqw, 3rem);*/
     line-height: 1;
     color: var(--text-primary);
@@ -184,24 +188,27 @@
     gap: 0.5rem;
 }
 
-.menu-info__group label{
-    font-size: 1rem;
+.menu-info__group label {
+    font-size: clamp(0.7rem, 4cqi, 1rem);
     text-transform: uppercase;
     color: var(--text-secondary);
     letter-spacing: 1px;
+
 }
 
 .menu-info__group a,
-.menu-info__group address{
+.menu-info__group address {
     block-size: auto;
-    font-size: 1.25rem;
+    font-size: clamp(1rem, 4cqi, 2rem);
     color: var(--text-primary);
     text-decoration: none;
     transition: color 0.3s ease;
+
+    word-break: break-word;
 }
 
 .menu-info__group a:hover,
-.menu-info__group address:hover{
+.menu-info__group address:hover {
     color: var(--accent);
 }
 
@@ -219,6 +226,56 @@
     flex: 1;
 }
 
+
+@media (max-width: 768px) {
+
+    .nav-trigger {
+        inset-inline-end: 0.5rem;
+        inset-block-start: 0.5rem;
+    }
+
+    .menu-overlay {
+        overscroll-behavior: none;
+        overflow: auto;
+        padding: 1rem;
+        padding-block-end: 0;
+    }
+
+    .menu-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+    }
+
+    .menu-item__info {
+        padding: 0;
+        grid-column: 1 / 3;
+    }
+
+    .menu-info__title {
+        /*font-size: 2rem;*/
+        padding-block-start: 1rem;
+        margin-block-end: 0;
+    }
+
+    .menu-info__content {
+        gap: 0;
+    }
+
+    .menu-info__group {
+        gap: 0;
+    }
+
+    .menu-info__socials {
+        margin-block-start: 0.5rem;
+    }
+}
+
+@media (hover: none) {
+    .menu-bg img {
+        filter: grayscale(0%) brightness(50%);
+    }
+
+}
 
 
 

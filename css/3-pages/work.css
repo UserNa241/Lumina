@@ -445,8 +445,68 @@
     }
 }
 
+@media (max-width: 768px) {
+
+    .work-header__inner {
+        flex-direction: column;
+        align-items: flex-start;
+
+        padding-inline: 1rem;
+    }
+
+    .filters {
+        inline-size: 100%;
+        padding-inline: 0;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .work-grid {
+        padding-inline: 1.5rem;
+    }
+
+    .case-modal__panel {
+        inset-inline-start: 0.5rem;
+        inset-block-end: 0.5rem;
+    }
+
+    .case-modal__img {
+        max-block-size: 80dvh;
+    }
+
+    .floating-next {
+        inset-inline-end: 0.5rem;
+        inset-block-end: 0.5rem;
+    }
+
+    .floating-next .material-symbols-outlined {
+        background-color: var(--bg-primary);
+        opacity: 0.5;
+    }
 
 
+
+}
+
+/* RESPONSIVE: CARD INTERACTION */
+@media (hover: none) {
+
+    /* 1. Force Overlay Visibility */
+    .project-card__overlay {
+        opacity: 1 !important;
+    }
+
+    /* 2. Reset Text Position (No slide-up animation) */
+    .project-card__title,
+    .project-card__year {
+        transform: translateY(0) !important;
+    }
+
+    /* 3. Disable Image Zoom on Scroll (Performance) */
+    .project-card__media img {
+        transform: none !important;
+    }
+}
 
 
 
