@@ -400,12 +400,12 @@
 }
 
 .floating-next .material-symbols-outlined {
-    color: var(--text-secondary);
+    color: black;
     font-size: 32px;
     padding: 1rem;
     border-radius: 50%;
 
-    background-color: pink;
+    background-color: var(--text-secondary);
 }
 
 .floating-next:hover .material-symbols-outlined {
